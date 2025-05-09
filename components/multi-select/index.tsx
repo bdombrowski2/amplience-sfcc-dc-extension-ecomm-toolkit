@@ -8,6 +8,7 @@ import AutoCompleteSingle from '../AutoCompleteSingle/AutoCompleteSingle'
 import AutoCompleteMultiple from '../AutoCompleteMultiple/AutoCompleteMultiple'
 import TreeViewSingle from '../TreeViewSingle/TreeViewSingle'
 import ProductSelector from '../ProductSelector'
+import ProductOrCategoryOrExtUrlSelector from '../ProductOrCategoryOrExtUrlSelector'
 
 import amplienceSDK from '../../lib/sdk'
 import { Typography, Divider, Dialog, Card, CardContent } from '@mui/material'
@@ -39,6 +40,8 @@ function App() {
         component = <TreeViewSingle ampSDK={ampSDK} />
     } else if (ampSDK?.view === 'product') {
         component = <ProductSelector ampSDK={ampSDK} />
+    } else if (ampSDK?.view === 'productOrCategoryOrExt') {
+        component = <ProductOrCategoryOrExtUrlSelector ampSDK={ampSDK} />
     } else {
         component = (
             <>

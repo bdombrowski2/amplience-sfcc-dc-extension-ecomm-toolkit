@@ -16,6 +16,7 @@ import {
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import styled from '@emotion/styled'
+import { getProductImage, getProductVariant, Product } from '../../lib/product';
 
 const StyledItem = styled(Box)`
     cursor: pointer;
@@ -82,7 +83,7 @@ const StyledItem = styled(Box)`
 const dragType = 'StyledItem'
 
 interface ProductTileProps {
-    product: any
+    product: Product
     size: number
     dataType: string
     selectProduct?: Function
@@ -97,14 +98,11 @@ const ProductTile = ({
     removeProduct = undefined,
     updateCard = undefined
 }: ProductTileProps) => {
-    const [variant, setVariant] = useState(
-        product.selectedVariant ? product.selectedVariant : product.variants[0]
-    )
     const [showSelectVariant, setShowSelectVariant] = useState(false)
     const [selectedIndex, setSelectedIndex] = React.useState(0)
     const ref = useRef(null)
     const [imageLoaded, setImageLoaded] = useState(false)
-    const [imgUrl, setImgUrl] = useState((variant.images && variant.images[0] && variant.images[0].url) || null)
+    const [imgUrl, setImgUrl] = useState(getProductImage(product))
 
     const handleClick = () => {
         if (selectProduct !== undefined) {
@@ -117,20 +115,18 @@ const ProductTile = ({
     }
 
     useEffect(() => {
-        const vari = product.selectedVariant
-            ? product.selectedVariant
-            : product.variants[0]
-        setVariant(vari)
-        if (vari.images && vari.images[0] && imgUrl !== vari.images[0].url) {
+        if (imgUrl !== getProductImage(product)) {
             setImageLoaded(false)
-            setImgUrl(vari.images[0].url)
+            setImgUrl(getProductImage(product))
         }
     }, [product, imgUrl])
 
     const selectVariant = (variant: any, index: number) => {
-        setVariant(variant)
         setSelectedIndex(index)
-        product.selectedVariant = variant
+        product.variants = [
+            variant,
+            ...product.variants.filter((v: any) => v.sku !== variant.sku)
+        ]
         if (updateCard !== undefined) updateCard(product)
     }
 
@@ -199,7 +195,7 @@ const ProductTile = ({
                                     <Avatar
                                         variant='square'
                                         alt={product.name}
-                                        src={(variant.images && variant.images[0] && variant.images[0].url) || null}
+                                        src={imgUrl || null}
                                     />
                                 </ListItemAvatar>
                                 <ListItemText
@@ -220,10 +216,10 @@ const ProductTile = ({
                     <img
                         onLoad={handleLoaded}
                         className={!imageLoaded ? 'hidden' : ''}
-                        src={`${(variant.images && variant.images[0] && variant.images[0].url)}?sw=${
+                        src={`${imgUrl}?sw=${
                             size * 2
                         }&fit=crop&auto=format`}
-                        srcSet={`${(variant.images && variant.images[0] && variant.images[0].url)}?sw=${
+                        srcSet={`${imgUrl}?sw=${
                             size * 2
                         }&fit=crop&auto=format&dpr=2 2x`}
                         alt={product.name}

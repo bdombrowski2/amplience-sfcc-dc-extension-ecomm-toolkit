@@ -42,14 +42,16 @@ const amplienceSDK = async () => {
     let { instance, installation } = sdk.params as ExtParameters
     let commerceApi = await initCommerceApi(installation)
 
+    let categoryTree: any[] = await commerceApi.getCategoryTree({})
+    let categoriesFlat = flattenCategories(categoryTree).map(cat => ({ name: `(${cat.slug}) ${cat.name}`, slug: cat.slug, id: cat.id }))
+
     if (instance.data === 'category') {
         if (instance.view === 'tree') {
-            values = await commerceApi.getCategoryTree({})
+            values = categoryTree
             if(value) value = cleanValue(value)
         }
         else {
-            let categoryTree: any[] = await commerceApi.getCategoryTree({})
-            values = flattenCategories(categoryTree).map(cat => ({ name: `(${cat.slug}) ${cat.name}`, slug: cat.slug, id: cat.id }))
+            values = categoriesFlat
 
             value = instance.type === 'string' && value ? 
                 (instance.view === 'multi' ? 
@@ -60,11 +62,10 @@ const amplienceSDK = async () => {
                     value
         }
     } else if (instance.data === 'product') {
-        let categoryTree: any[] = await commerceApi.getCategoryTree({})
-        values = flattenCategories(categoryTree).map(cat => ({ name: `(${cat.slug}) ${cat.name}`, slug: cat.slug, id: cat.id }))
+        values = categoriesFlat
         value = instance.type === 'string' && value ? values.find(opt => cleanValue(value) === opt.id) : value
     }
-    else { // a.data === 'customerGroups'
+    else if (instance.data === 'customerGroups') {
         values = await commerceApi.getCustomerGroups({})
         value = instance.type === 'string' && value ? 
             (instance.view === 'multi' ? 
@@ -80,6 +81,7 @@ const amplienceSDK = async () => {
         getValue: () => value,
         getValues: () => values,
         getStoredValue: () => storedVal,
+        getCategories: () => categoriesFlat,
 
         setValue: async (newValue: ValueType) => {
             if (newValue) {

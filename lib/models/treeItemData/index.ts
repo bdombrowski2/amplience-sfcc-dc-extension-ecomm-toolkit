@@ -24,6 +24,7 @@ export interface AmpSDKProps {
         getValue: () => any
         getValues: () => any
         getStoredValue: () => any
+        getCategories: () => {name: string, slug: string, id: string}[]
         setValue: (value: any) => void
         setHeight: (height: number) => void
         isEnforced: () => boolean
