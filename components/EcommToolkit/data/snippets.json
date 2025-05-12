@@ -1,0 +1,31 @@
+{
+    "cta": {
+        "title": "CTA",
+        "description": "Select text and target for a Call-to-Action",
+        "type": "object",
+        "properties": {
+            "id": {
+                "title": "ID",
+                "type": "string"
+            },
+            "idType": {
+                "title": "Type",
+                "type": "string"
+            },
+            "image": {
+                "title": "Image",
+                "type": "string"
+            },
+            "text": {
+                "title": "Text for Button/Alt",
+                "type": "string"
+            }
+        },
+        "ui:extension": {
+            "name": "ecomm-toolkit",
+            "params": {
+                "fieldType": "cta"
+            }
+        }
+    }
+}
