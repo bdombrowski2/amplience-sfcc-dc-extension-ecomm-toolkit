@@ -15,7 +15,7 @@
         "prepare-patch-release": "run-s build version:patch",
         "prepare-minor-release": "run-s build version:minor",
         "prepare-major-release": "run-s build version:major",
-        "postinstall": "./components/EcommToolkit/postinstall.js"
+        "postinstall": "./components/EcommToolkit/lib/postinstall.js"
     },
     "dependencies": {
         "@amplience/dc-integration-middleware": "^2.5.0",
