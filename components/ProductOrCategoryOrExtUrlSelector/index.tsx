@@ -37,7 +37,7 @@ export default function ProductOrCategoryOrExtUrlSelector({
     ampSDK.getValue() || selectedBlank
   );
   const idInput = useRef<HTMLInputElement>(null);
-  const defaultHeight = 240;
+  const defaultHeight = 310;
 
   const searchProductById = async () => {
     if (!idInput.current?.value) return;
@@ -86,12 +86,12 @@ export default function ProductOrCategoryOrExtUrlSelector({
       </Backdrop>
 
       <FormControl size="small" sx={{ minWidth: 180, mt: 2, mb: 2 }}>
-        <InputLabel id="type-select-label">Select Type</InputLabel>
+        <InputLabel id="type-select-label">Select CTA Type</InputLabel>
         <Select
           labelId="type-select-label"
           id="type-select"
           value={selected.extIdType}
-          label="Select Type"
+          label="Select CTA Type"
           onChange={(e) =>
             setSelected({ ...selectedBlank, extIdType: e.target.value })
           }
@@ -104,7 +104,7 @@ export default function ProductOrCategoryOrExtUrlSelector({
 
       {selected.extIdType === "product" && (
         <>
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", mb: 2 }}>
             <TextField
               inputRef={idInput}
               size="small"
@@ -120,6 +120,7 @@ export default function ProductOrCategoryOrExtUrlSelector({
               inputProps={{
                 "aria-label": "product or style id (escape key to clear)",
               }}
+              InputLabelProps={{shrink: true}} // This version MUI label shrink is buggy
               onKeyDown={handleIdKeydown}
               onChange={(e) =>
                 setSelected({ ...selected, extId: e.target.value })
@@ -135,16 +136,6 @@ export default function ProductOrCategoryOrExtUrlSelector({
               <SearchIcon />
             </IconButton>
           </Box>
-          <Typography
-            mt={1}
-            ml={3}
-            variant="h3"
-            fontSize={"12px"}
-            fontWeight={"normal"}
-            color={"#597684"}
-          >
-            text: {selected?.text ? selected?.text + "✅" : ""}
-          </Typography>
         </>
       )}
 
@@ -164,7 +155,8 @@ export default function ProductOrCategoryOrExtUrlSelector({
             getOptionLabel={(option) => option.text}
             sx={{
               width: "100%",
-              marginTop: "6px",
+              //   marginTop: "6px",
+              mb: 2,
               "& label": { color: "#597681" },
               "& fieldset": { borderColor: "#b4c0f2", borderRadius: ".5rem" },
               "& fieldset:hover": { borderColor: "#b4bef2" },
@@ -183,7 +175,7 @@ export default function ProductOrCategoryOrExtUrlSelector({
               ampSDK.setHeight(defaultHeight);
             }}
             onOpen={() => {
-              ampSDK.setHeight(440);
+              ampSDK.setHeight(360);
             }}
             renderInput={(params) => <TextField {...params} label="Category" />}
           />
@@ -191,87 +183,94 @@ export default function ProductOrCategoryOrExtUrlSelector({
       )}
 
       {selected.extIdType === "extUrl" && (
-        <>
-          <Box sx={{ display: "flex", mb: 2 }}>
-            <TextField
-              size="small"
-              sx={{
-                flex: 1,
-                "& label": { color: "#597681" },
-                "& fieldset": { borderColor: "#b4c0f2", borderRadius: ".5rem" },
-                "& fieldset:hover": { borderColor: "#b4bef2" },
-              }}
-              label="Button and/or Alt Text"
-              color="primary"
-              variant="outlined"
-              inputProps={{
-                "aria-label": "Button and/or Alt Text",
-              }}
-              onChange={(e) => {
-                const next: AmpContentType = {
-                  ...selected,
-                  text: e.target.value,
-                };
-                setSelected(next);
-                ampSDK.setValue(next);
-              }}
-              value={selected.text}
-            />
-          </Box>
-          <Box sx={{ display: "flex", mb: 2 }}>
-            <TextField
-              size="small"
-              sx={{
-                flex: 1,
-                "& label": { color: "#597681" },
-                "& fieldset": { borderColor: "#b4c0f2", borderRadius: ".5rem" },
-                "& fieldset:hover": { borderColor: "#b4bef2" },
-              }}
-              label="External URL"
-              color="primary"
-              variant="outlined"
-              inputProps={{
-                "aria-label": "product or style id (escape key to clear)",
-              }}
-              onChange={(e) => {
-                const next: AmpContentType = {
-                  ...selected,
-                  extId: e.target.value,
-                };
-                setSelected(next);
-                ampSDK.setValue(next);
-              }}
-              value={selected.extId}
-            />
-          </Box>
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              size="small"
-              sx={{
-                flex: 1,
-                "& label": { color: "#597681" },
-                "& fieldset": { borderColor: "#b4c0f2", borderRadius: ".5rem" },
-                "& fieldset:hover": { borderColor: "#b4bef2" },
-              }}
-              label="Image URL"
-              color="primary"
-              variant="outlined"
-              inputProps={{
-                "aria-label": "product or style id (escape key to clear)",
-              }}
-              onChange={(e) => {
-                const next: AmpContentType = {
-                  ...selected,
-                  image: e.target.value,
-                };
-                setSelected(next);
-                ampSDK.setValue(next);
-              }}
-              value={selected.image}
-            />
-          </Box>
-        </>
+        <Box sx={{ display: "flex", mb: 2 }}>
+        <TextField
+            size="small"
+            sx={{
+            flex: 1,
+            "& label": { color: "#597681" },
+            "& fieldset": { borderColor: "#b4c0f2", borderRadius: ".5rem" },
+            "& fieldset:hover": { borderColor: "#b4bef2" },
+            }}
+            label="External URL"
+            color="primary"
+            variant="outlined"
+            inputProps={{
+            "aria-label": "product or style id (escape key to clear)",
+            }}
+            InputLabelProps={{shrink: true}} // This version MUI label shrink is buggy
+            onChange={(e) => {
+            const next: AmpContentType = {
+                ...selected,
+                extId: e.target.value,
+            };
+            setSelected(next);
+            ampSDK.setValue(next);
+            }}
+            value={selected.extId}
+        />
+        </Box>
       )}
+
+      {selected.extIdType && (
+        <>
+        
+        <Box sx={{ display: "flex", mb: 2 }}>
+        <TextField
+            size="small"
+            sx={{
+            flex: 1,
+            "& label": { color: "#597681" },
+            "& fieldset": { borderColor: "#b4c0f2", borderRadius: ".5rem" },
+            "& fieldset:hover": { borderColor: "#b4bef2" },
+            }}
+            label="Button and/or Alt Text"
+            color="primary"
+            variant="outlined"
+            inputProps={{
+            "aria-label": "Button and/or Alt Text",
+            }}
+            InputLabelProps={{shrink: true}} // This version MUI label shrink is buggy
+            onChange={(e) => {
+            const next: AmpContentType = {
+                ...selected,
+                text: e.target.value,
+            };
+            setSelected(next);
+            ampSDK.setValue(next);
+            }}
+            value={selected.text}
+        />
+        </Box>
+        <Box sx={{ display: "flex" }}>
+        <TextField
+            size="small"
+            sx={{
+            flex: 1,
+            "& label": { color: "#597681" },
+            "& fieldset": { borderColor: "#b4c0f2", borderRadius: ".5rem" },
+            "& fieldset:hover": { borderColor: "#b4bef2" },
+            }}
+            label="Image URL (if applicable)"
+            color="primary"
+            variant="outlined"
+            inputProps={{
+            "aria-label": "Image URL (if applicable)",
+            }}
+            InputLabelProps={{shrink: true}} // This version MUI label shrink is buggy
+            onChange={(e) => {
+            const next: AmpContentType = {
+                ...selected,
+                image: e.target.value,
+            };
+            setSelected(next);
+            ampSDK.setValue(next);
+            }}
+            value={selected.image}
+        />
+        </Box>
+        </>
+        )}
     </div>
   );
 }
